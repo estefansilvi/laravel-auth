@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,10 +18,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('games', 'PublicController@index')->name('public.games.index'); // index
+Route::get('games/{games}', 'PublicController@show')->name('public.games.show');  //show
+
+// Route::resource('auto', AutoController::class)->middleware('auth');
+Route::prefix('admin')
+    ->namespace('Admin')
+    ->middleware('auth')
+    ->group(function () {
+        Route::resource('games', GameController::class);
+    });
