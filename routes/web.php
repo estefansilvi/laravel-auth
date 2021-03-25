@@ -23,10 +23,12 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/private','PrivateController@index')->middleware('auth');
+
 Route::get('games', 'PublicController@index')->name('public.games.index'); // index
 Route::get('games/{games}', 'PublicController@show')->name('public.games.show');  //show
 
-// Route::resource('auto', AutoController::class)->middleware('auth');
+// Route::resource('games', AutoController::class)->middleware('auth');
 Route::prefix('admin')
     ->namespace('Admin')
     ->middleware('auth')

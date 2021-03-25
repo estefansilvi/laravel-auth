@@ -36,7 +36,12 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-
+        $data=$request->all();
+        $games=new Game();
+        $games->fill($data);
+        $games->save();
+        $gameStored=Game::orderBy('id','desc')->first();
+        return redirect()->route('games.show',$gameStored);
     }
 
     /**
@@ -45,9 +50,9 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show(Game $game)
     {
-
+        return redirect()->route('games.show.public',compact('game'));
     }
 
     /**
@@ -56,9 +61,9 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit()
+    public function edit(Game $game)
     {
-
+        return view('/edit',compact('game'));
     }
 
     /**
@@ -68,9 +73,12 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update()
+    public function update(Request $request,Game $game)
     {
+        $data = $request->all();
+        $game->update($data);
 
+        return redirect()->route('games.show',compact('game'));
     }
 
     /**
@@ -79,8 +87,9 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy()
+    public function destroy(Game $game)
     {
-
+        $game->delete();
+        return redirect()->route('games.home');
     }
 }
